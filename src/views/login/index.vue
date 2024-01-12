@@ -5,20 +5,24 @@
       <h1>登录</h1>
       <el-card shadow="never" class="login-card">
         <!--登录表单-->
-        <el-form>
-          <el-form-item>
-            <el-input placeholder="用户名" />
+        <el-form ref="form" :model="loginFrom" :rules="loginRules">
+          <!-- 手机号 -->
+          <el-form-item prop="mobile">
+            <el-input v-model="loginFrom.mobile" placeholder="请输入手机号" />
           </el-form-item>
-          <el-form-item>
-            <el-input placeholder="密码" />
+          <!-- 密码 -->
+          <el-form-item prop="password">
+            <el-input v-model="loginFrom.password" placeholder="请输入密码" />
           </el-form-item>
-          <el-form-item>
-            <el-checkbox>
+          <!-- 勾选协议 -->
+          <el-form-item prop="isAgree">
+            <el-checkbox v-model="loginFrom.isAgree">
               用户平台使用协议
             </el-checkbox>
           </el-form-item>
+          <!-- 登录按钮 -->
           <el-form-item>
-            <el-button style="width: 350px;" type="primary">登录</el-button>
+            <el-button style="width: 350px;" type="primary" @click="login">登录</el-button>
           </el-form-item>
         </el-form>
       </el-card>
@@ -70,8 +74,9 @@ export default {
   methods : {
     // 登录函数
     login(){
+      console.log(this.$refs.form);
       // 校验表单
-      this.$refs.form.validator((isOk) => {
+      this.$refs.form.validate((isOk) => {
         // 判断表单是否校验通过
         if(isOk){
           // 校验成功, 调用接口
