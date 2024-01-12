@@ -74,14 +74,16 @@ export default {
   methods : {
     // 登录函数
     login(){
-      console.log(this.$refs.form);
+      // console.log(this.$refs.form);
       // 校验表单
       this.$refs.form.validate((isOk) => {
         // 判断表单是否校验通过
         if(isOk){
           // 校验成功, 调用接口
-          // 调用接口
-          alert('校验成功')
+          // console.log(this.$store);
+          //因为user模块导出的时候**namespaced为true**，所以我们调用action的时候要加上模块名称如**user/login**
+          this.$store.dispatch('user/login', this.loginFrom);
+          console.log(this.loginFrom);
         }
       })
     }
