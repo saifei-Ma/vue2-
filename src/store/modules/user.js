@@ -21,7 +21,14 @@ const mutations = {
   }
 }
 const actions = {
-
+  // context上下文, 传入参数
+  async login({ commit },data){
+    console.log(data);
+    // todo : 调用登录接口
+    const token = await login(data)
+    // 提交mutations中的setToken函数，传入token
+    commit('setToken', token)
+  }
 }
 // 导出默认的模块，设置命名空间为true，state为初始状态，mutations为状态变更函数，actions为执行函数
 export default {
