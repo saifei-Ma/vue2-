@@ -40,9 +40,9 @@ export default {
       // 登录表单
       loginFrom: {
         // 手机号
-        mobile: process.env.NODE_ENV === 'development' ? '13800000002' : '',
+        mobile: process.env.NODE_ENV === 'development' ? '13111111111' : '',
         // 密码
-        password: process.env.NODE_ENV === 'development' ? 'hm#qd@23!' : '',
+        password: process.env.NODE_ENV === 'development' ? '123456' : '',
         // 是否同意协议
         isAgree: process.env.NODE_ENV === 'development'
       },
