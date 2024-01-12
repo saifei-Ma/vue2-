@@ -79,11 +79,14 @@ export default {
       this.$refs.form.validate((isOk) => {
         // 判断表单是否校验通过
         if(isOk){
+          
           // 校验成功, 调用接口
           // console.log(this.$store);
           //因为user模块导出的时候**namespaced为true**，所以我们调用action的时候要加上模块名称如**user/login**
           this.$store.dispatch('user/login', this.loginFrom);
           console.log(this.loginFrom);
+          // 跳转主页
+          this.$router.push('/')
         }
       })
     }

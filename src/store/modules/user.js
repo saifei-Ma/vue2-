@@ -26,6 +26,7 @@ const actions = {
   async login(context,data){
     console.log(data);
     const token = await login(data)
+    console.log(token);
     // 提交mutations中的setToken函数，传入token
     context.commit('setToken', token)
   }
