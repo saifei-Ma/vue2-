@@ -9,3 +9,13 @@ export function getDepartment(){
     url : '/company/department'
   })
 }
+/**
+* @author: 马赛飞
+* @Description: 获取部门负责人的API接口
+* @param: 
+*/
+export function getManagerList(){
+  return request({
+    url : '/sys/user/simple'
+  })
+}

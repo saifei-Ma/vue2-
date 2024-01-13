@@ -12,7 +12,7 @@
           <el-row style="width: 100%;height: 100%;" type="flex" justify="space-between" align="middle">
             <el-col>{{ data.name }}</el-col>
             <el-col :span="4">
-              <span class="tree-manage">{{ data.managerName }}</span>
+              <span class="tree-manager">{{ data.managerName }}</span>
               <!-- $event 实参 : 表示类型 -->
               <el-dropdown @command="operateDept">
                 <span class="el-dropdown-link">
@@ -90,6 +90,6 @@ export default {
 .tree-manager {
   width: 50px;
   display: inline-block;
-  margin: 10px;
+  margin-right: 40px;
 }
 </style>
