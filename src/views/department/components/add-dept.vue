@@ -3,16 +3,17 @@
         @close：对话框关闭时触发的事件，这里绑定了一个方法 close
         title：对话框的标题，这里设置为 "新增部门"
   -->
-  <el-dialog title="新增部门" :visible="showDialog" @close="close">
-    <el-form label-width="120px">
+  <el-dialog :visible="showDialog" @close="close">
+    <!-- 存放弹层内容 -->
+    <el-form label-width="120px" ref="addDept" :rules="rules" :model="formData">
       <el-form-item prop="name" label="部门名称">
         <el-input v-model="formData.name" placeholder="2-10个字符" style="width: 80%;" size="mini"></el-input>
       </el-form-item>
       <el-form-item prop="code" label="部门编码">
         <el-input v-model="formData.code" placeholder="2-10个字符" style="width: 80%;" size="mini"></el-input>
       </el-form-item>
-      <el-form-item prop="mangerId" label="部门负责人">
-        <el-select v-model="formData.mangerId" placeholder="请选择负责人" style="width: 80%;" size="mini">
+      <el-form-item prop="managerId" label="部门负责人">
+        <el-select v-model="formData.managerId" placeholder="请选择负责人" style="width: 80%;" size="mini">
           <!-- 下拉选项--遍历managerList数组 label : 显示的字段  value : 存储字段 -->
           <el-option v-for="item in managerList" :key="item.id" :label="item.username" :value="item.id"></el-option>
         </el-select>
@@ -21,21 +22,21 @@
         <el-input v-model="formData.introduce" placeholder="1-100个字符" style="width: 80%;" size="mini" type="textarea"
           :rows="4"></el-input>
       </el-form-item>
-      <el-item-item>
+      <el-form-item>
         <!-- 按钮 -->
         <el-row type="flex" justify="center">
           <el-col :span="12">
-            <el-button type="primary" size="mini">确认</el-button>
+            <el-button type="primary" size="mini" @click="btnOk">确认</el-button>
             <el-button size="mini">取消</el-button>
           </el-col>
         </el-row>
-      </el-item-item>
+      </el-form-item>
     </el-form>
   </el-dialog>
 </template>
 
 <script>
-import { getDepartment,getManagerList } from '@/api/department'
+import { getDepartment,getManagerList, addDepartment } from '@/api/department'
 export default {
   name: 'AddDept',
   // 声明一个props属性，用于接收父组件传入的showDialog属性
@@ -56,7 +57,7 @@ export default {
       formData: {
         code: '', // 部门编码
         introduce: '', // 部门介绍
-        mangerId: '', // 部门管理者id
+        managerId: '', // 部门管理者id
         name: '', // 部门名称
         pid: '', // 父部门id
       },
@@ -124,6 +125,31 @@ export default {
     async getManagerList() {
       this.managerList = await getManagerList();
       // console.log(this.managerList);
+    },
+    /**
+    * @author: 马赛飞
+    * @Description: 点击确认按钮的回调函数
+    * @param: 
+    */
+    btnOk() {
+      // 打印出添加部门表单的引用
+      console.log(this.$refs.addDept);
+      // 验证表单是否有效
+      this.$refs.addDept.validate(async isOK => {
+        // 如果表单有效
+        if(isOK){
+          // 添加部门
+          console.log({...this.formData, pid: this.currentNodeId});
+          await addDepartment({...this.formData, pid: this.currentNodeId});
+          // 通知父组件更新
+          this.$emit('updateDepartment');
+          // 提示信息
+          this.$message.success('添加部门成功');
+          this.close();
+        }else{
+          console.log('当前表单无效');
+        }
+      })
     }
   },
   created(){

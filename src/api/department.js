@@ -19,3 +19,15 @@ export function getManagerList(){
     url : '/sys/user/simple'
   })
 }
+/**
+* @author: 马赛飞
+* @Description: 新增部门的API接口
+* @param: 
+*/
+export function addDepartment(data){
+  return request({
+    method : 'POST',
+    url : '/company/department',
+    data
+  })
+}

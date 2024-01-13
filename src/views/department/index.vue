@@ -33,17 +33,17 @@
     <!-- 编辑子部门的对话框 
           :show-dialog.sync : 实现了子组件的 showDialog 属性与父组件中的 showDialog 变量的双向绑定
     -->
-    <addDept :current-nide-id="currentNodeId" :show-dialog.sync="showDialog"  />
+    <add-dept @updateDepartment="getDepartment" ref="addDept" :current-node-id="currentNodeId" :show-dialog.sync="showDialog"  />
   </div>
 </template>
 
 <script>
 import { getDepartment } from '@/api/department';
 import { tranListToTreeData } from '@/utils/index';
-import addDept from './components/add-dept.vue';
+import AddDept from './components/add-dept.vue';
 export default {
   name: 'Department',
-  components : {addDept},
+  components : {AddDept},
   data() {
     return {
       depts: [{
@@ -76,8 +76,10 @@ export default {
       if (type === 'add') {
         // 显示对话框
         this.showDialog = true;
+        
         // 给当前点击的部门id赋值
         this.currentNodeId = id;
+        console.log(this.currentNodeId);
       }
     }
   }
