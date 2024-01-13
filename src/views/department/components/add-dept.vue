@@ -4,7 +4,29 @@
         title：对话框的标题，这里设置为 "新增部门"
   -->
   <el-dialog title="新增部门" :visible="showDialog" @close="close">
-
+    <el-form label-width="120px">
+      <el-form-item prop="name" label="部门名称">
+        <el-input placeholder="2-10个字符" style="width: 80%;" size="mini"></el-input>
+      </el-form-item>
+      <el-form-item label="部门编码">
+        <el-input placeholder="2-10个字符" style="width: 80%;" size="mini"></el-input>
+      </el-form-item>
+      <el-form-item label="部门负责人">
+        <el-select placeholder="请选择负责人" style="width: 80%;" size="mini"></el-select>
+      </el-form-item>
+      <el-form-item label="部门介绍">
+        <el-input placeholder="1-100个字符" style="width: 80%;" size="mini" type="textarea" :rows="4" ></el-input>
+      </el-form-item>
+      <el-item-item>
+        <!-- 按钮 -->
+        <el-row type="flex" justify="center">
+          <el-col :span="12">
+          <el-button type="primary" size="mini">确认</el-button>
+          <el-button size="mini"></el-button>
+        </el-col>
+        </el-row>
+      </el-item-item>
+    </el-form>
   </el-dialog>
 </template>
 

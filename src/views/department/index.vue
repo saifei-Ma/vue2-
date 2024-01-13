@@ -30,15 +30,20 @@
         </template>
       </el-tree>
     </div>
-    <add-dept  :show-dialog.sync="showDialog"  />
+    <!-- 编辑子部门的对话框 
+          :show-dialog.sync : 实现了子组件的 showDialog 属性与父组件中的 showDialog 变量的双向绑定
+    -->
+    <addDept  :show-dialog.sync="showDialog"  />
   </div>
 </template>
 
 <script>
 import { getDepartment } from '@/api/department';
 import { tranListToTreeData } from '@/utils/index';
+import addDept from './components/add-dept.vue';
 export default {
   name: 'Department',
+  components : {addDept},
   data() {
     return {
       depts: [{
