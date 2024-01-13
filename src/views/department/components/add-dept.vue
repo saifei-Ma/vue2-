@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { getDepartment } from '@/api/department'
 export default {
   name: 'AddDept',
   // 声明一个props属性，用于接收父组件传入的showDialog属性
@@ -56,7 +57,21 @@ export default {
       rules: {
         code: [
           { required: true, message: '部门编码不能为空', trigger: 'blur' },
-          { min: 2, max: 10, message: '部门编码2-10个字符', trigger: 'blur' }
+          { min: 2, max: 10, message: '部门编码2-10个字符', trigger: 'blur' },
+          {
+            trigger : 'blur',
+            // 自定义校验规则
+            validator: async(rule, value, callback) => {
+              // value : 输入编码
+              let result = await getDepartment();
+              // result数组中是否存在 value 值
+              if(result.some(item => item.code === value)){
+                callback(new Error('部门编码已存在'))
+              }else{
+                callback()
+              }
+            }
+          }
         ],
         introduce: [
           { required: true, message: '部门介绍不能为空', trigger: 'blur' },
@@ -67,7 +82,21 @@ export default {
         ],
         name: [
           { required: true, message: '部门名称不能为空', trigger: 'blur' },
-          { min: 2, max: 10, message: '部门名称2-10个字符', trigger: 'blur' }
+          { min: 2, max: 10, message: '部门名称2-10个字符', trigger: 'blur' },
+          {
+            trigger : 'blur',
+            // 自定义校验规则
+            validator: async(rule, value, callback) => {
+              // value : 输入的部门名称
+              let result = await getDepartment();
+              // 判断result数组中是否存在 value 值
+              if(result.some(item => item.name === value)){
+                callback(new Error('部门名称已存在'))
+              }else {
+                callback()
+              }
+            }
+          }
         ],
         // pid: '' // 父级部门的id 不需要做校验
       }
