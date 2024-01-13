@@ -1,6 +1,3 @@
-/**
- * Created by PanJiaChen on 16/11/18.
- */
 
 /**
  * Parse the time to string
@@ -114,4 +111,29 @@ export function param2Obj(url) {
     }
   })
   return obj
+}
+
+/**
+* @author: 马赛飞
+* @Description: 公共方法--列表形数据转化为树形
+* @param: 
+*/
+// 导出一个函数，用于将列表转换为树形数据
+export function tranListToTreeData(list, rootValue) {
+  // 定义一个空数组，用于存放转换后的数据
+  const arr = [];
+  // 遍历列表中的每一项
+  list.forEach(item=>{
+    // 如果当前项的父节点的id等于根节点的id
+    if(item.pid === rootValue){
+      // 递归调用tranListToTreeData函数，将当前项的子节点转换为树形数据
+      const children = tranListToTreeData(list, item.id);
+      // 将转换后的子节点赋值给当前项的children属性
+      item.children = children;
+      // 将当前项添加到arr数组中
+      arr.push(item);
+    }
+  })
+  // 返回arr数组
+  return arr;
 }

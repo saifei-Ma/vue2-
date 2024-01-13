@@ -35,6 +35,7 @@
 
 <script>
 import { getDepartment } from '@/api/department';
+import { tranListToTreeData } from '@/utils/index';
 export default {
   name: 'Department',
   data(){
@@ -56,8 +57,8 @@ export default {
   methods: {
     async getDepartment(){
       const result = await getDepartment();
-      console.log(result);
-      this.depts = result;
+      // console.log(result);
+      this.depts = tranListToTreeData(result, 0);
     }
   }
 }
