@@ -14,7 +14,7 @@
             <el-col :span="4">
               <span class="tree-manager">{{ data.managerName }}</span>
               <!-- $event 实参 : 表示类型 -->
-              <el-dropdown @command="operateDept">
+              <el-dropdown @command="operateDept($event,data.id)">
                 <span class="el-dropdown-link">
                   操作<i class="el-icon-arrow-down el-icon-right"></i>
                 </span>
@@ -33,7 +33,7 @@
     <!-- 编辑子部门的对话框 
           :show-dialog.sync : 实现了子组件的 showDialog 属性与父组件中的 showDialog 变量的双向绑定
     -->
-    <addDept  :show-dialog.sync="showDialog"  />
+    <addDept :current-nide-id="currentNodeId" :show-dialog.sync="showDialog"  />
   </div>
 </template>
 
@@ -56,6 +56,8 @@ export default {
       },
       // 控制弹层的显示与隐藏
       showDialog: false,
+      // 存储当前点击的部门id
+      currentNodeId: null,
     }
   },
   // 组件创建完成时执行的钩子函数
@@ -69,12 +71,13 @@ export default {
       this.depts = tranListToTreeData(result, 0);
     },
     // 操作部门
-    operateDept(type) {
+    operateDept(type,id) {
       // 判断type是否为add
       if (type === 'add') {
         // 显示对话框
         this.showDialog = true;
-        console.log('添加部门');
+        // 给当前点击的部门id赋值
+        this.currentNodeId = id;
       }
     }
   }

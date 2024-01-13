@@ -46,7 +46,10 @@ export default {
       // 声明showDialog属性的默认值为false
       default: false
     },
-
+    currentNodeId: {
+      type: Number,
+      default: null
+    }
   },
   data() {
     return {
