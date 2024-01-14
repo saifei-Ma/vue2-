@@ -80,6 +80,20 @@ export default {
         // 给当前点击的部门id赋值
         this.currentNodeId = id;
         console.log(this.currentNodeId);
+      }else if(type === 'edit'){
+        // 编辑部门场景
+        this.showDialog = true;
+        this.currentNodeId = id; // 保存id, 用它来获取数据
+        
+        // 因为弹出层之后紧接着要调用子组件方法，第一次弹出层时，里面的组件还未完成渲染，所以要等到showDialog这个属性设置的数据完成渲染之后才进行调用
+        // 利用$nextTick方法，在DOM更新循环之后执行延迟回调
+        this.$nextTick(() => {
+          // 更新props- 异步动作
+          // 直接调用了子组件的方法 同步的方法
+          // 要在子组件获取数据
+          // 父组件调用子组件的方法来获取数据
+          this.$refs.addDept.getDepartmentDetail();
+        })
       }
     }
   }

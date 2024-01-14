@@ -31,3 +31,13 @@ export function addDepartment(data){
     data
   })
 }
+/**
+* @author: 马赛飞
+* @Description: 获取部门详情的API接口
+* @param: 
+*/
+export const getDepartmentDetail = (id) => {
+  return request({
+    url : '/company/department/' + id
+  })
+}

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { getDepartment,getManagerList, addDepartment } from '@/api/department'
+import { getDepartment,getManagerList, addDepartment, getDepartmentDetail } from '@/api/department'
 export default {
   name: 'AddDept',
   // 声明一个props属性，用于接收父组件传入的showDialog属性
@@ -153,6 +153,14 @@ export default {
     },
     btnNoOk(){
       this.close();
+    },
+    /**
+    * @author: 马赛飞
+    * @Description: 获取部门详情的方法
+    * @param: 
+    */
+    async getDepartmentDetail () {
+      this.formData = await getDepartmentDetail(this.currentNodeId);
     }
   },
   created(){
