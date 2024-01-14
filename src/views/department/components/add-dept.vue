@@ -71,6 +71,10 @@ export default {
             validator: async(rule, value, callback) => {
               // value : 输入编码
               let result = await getDepartment();
+              if(this.formData.id){
+                // 携带id,说明是编辑状态
+                result = result.filter(item => item.id !== this.formData.id)
+              }
               // result数组中是否存在 value 值
               if(result.some(item => item.code === value)){
                 callback(new Error('部门编码已存在'))
@@ -96,6 +100,10 @@ export default {
             validator: async(rule, value, callback) => {
               // value : 输入的部门名称
               let result = await getDepartment();
+              if(this.formData.id){
+                // 携带id,说明是编辑状态
+                result = result.filter(item => item.id !== this.formData.id)
+              }
               // 判断result数组中是否存在 value 值
               if(result.some(item => item.name === value)){
                 callback(new Error('部门名称已存在'))
