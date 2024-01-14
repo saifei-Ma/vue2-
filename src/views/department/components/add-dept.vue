@@ -3,7 +3,7 @@
         @close：对话框关闭时触发的事件，这里绑定了一个方法 close
         title：对话框的标题，这里设置为 "新增部门"
   -->
-  <el-dialog :visible="showDialog" @close="close">
+  <el-dialog :title="showTitle" :visible="showDialog" @close="close">
     <!-- 存放弹层内容 -->
     <el-form label-width="120px" ref="addDept" :rules="rules" :model="formData">
       <el-form-item prop="name" label="部门名称">
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { getDepartment,getManagerList, addDepartment, getDepartmentDetail } from '@/api/department'
+import { getDepartment,getManagerList, addDepartment, getDepartmentDetail, updateDepartment } from '@/api/department'
 export default {
   name: 'AddDept',
   // 声明一个props属性，用于接收父组件传入的showDialog属性
@@ -122,7 +122,15 @@ export default {
   methods: {
     // 关闭弹窗调用的方法
     close() {
-      // 清空表单数据
+      // 修改父组件的值 子穿父
+      this.formData = {
+        code: '', // 部门编码
+        introduce: '', // 部门介绍
+        managerId: '', // 部门负责人id
+        name: '', // 部门名称
+        pid: '' // 父级部门的id
+      }
+      // 重置表单数据 resetFields 只能重置在模板中绑定的数据
       this.$refs.addDept.resetFields();
       // 调用父组件传入的emit方法，传入参数，将showDialog属性值设置为false
       this.$emit('update:showDialog', false)
@@ -143,22 +151,30 @@ export default {
     */
     btnOk() {
       // 打印出添加部门表单的引用
-      console.log(this.$refs.addDept);
+      // console.log(this.$refs.addDept);
       // 验证表单是否有效
       this.$refs.addDept.validate(async isOK => {
         // 如果表单有效
         if(isOK){
-          // 添加部门
-          console.log({...this.formData, pid: this.currentNodeId});
-          await addDepartment({...this.formData, pid: this.currentNodeId});
+          let msg = '新增';
+          // 通过判断是否携带id，来判断是添加还是编辑
+          if(this.formData.id){
+            msg = '编辑';
+            await updateDepartment(this.formData);
+          }else{
+            // 添加部门
+            // console.log({...this.formData, pid: this.currentNodeId});
+            await addDepartment({...this.formData, pid: this.currentNodeId});
+          }
           // 通知父组件更新
           this.$emit('updateDepartment');
           // 提示信息
-          this.$message.success('添加部门成功');
+          this.$message.success(`${msg}部门成功`);
           this.close();
         }
       })
     },
+    // 关闭弹窗的回调函数
     btnNoOk(){
       this.close();
     },
@@ -174,6 +190,12 @@ export default {
   created(){
     // 调用获取部门负责人列表的方法
     this.getManagerList();
+  },
+  computed: {
+    // 通过计算属性来绝对当前展示的弹层标题
+    showTitle(){
+      return this.formData.id ? '编辑部门' : '新增部门';
+    }
   }
 }
 </script>

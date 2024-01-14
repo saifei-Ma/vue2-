@@ -41,3 +41,15 @@ export const getDepartmentDetail = (id) => {
     url : '/company/department/' + id
   })
 }
+/**
+* @author: 马赛飞
+* @Description: 更新部门详情数据的API接口
+* @param: 
+*/
+export const updateDepartment = (data) => {
+  return request({
+    method : 'PUT',
+    url : '/company/department/' + data.id,
+    data
+  })
+}
