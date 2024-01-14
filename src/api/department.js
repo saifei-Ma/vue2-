@@ -53,3 +53,14 @@ export const updateDepartment = (data) => {
     data
   })
 }
+/**
+* @author: 马赛飞
+* @Description: 删除部门的API接口
+* @param: 
+*/
+export const deleteDepartment = (id) => {
+  return request({
+    method : 'DELETE',
+    url : '/company/department/' + id
+  })
+}
