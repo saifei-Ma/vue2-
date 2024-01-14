@@ -8,10 +8,22 @@
       <!-- 放置 table 组件 -->
       <el-table :data="list">
         <!-- 放置列 -->
-        <el-table-column align="center" width="200" label="角色"></el-table-column>
-        <el-table-column align="center" width="200" label="启用"></el-table-column>
-        <el-table-column width="200" label="描述"></el-table-column>
-        <el-table-column width="200" label="操作"></el-table-column>
+        <el-table-column prop="name" align="center" width="200" label="角色"></el-table-column>
+        <el-table-column prop="state" align="center" width="200" label="启用">
+          <!-- 自定义列结构 -->
+          <template v-slot="{ row }">
+            <span>{{ row.state === 1 ? '已启用' : row.state === 0 ? '未启用' : '无' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="description" label="描述"></el-table-column>
+        <el-table-column width="200" label="操作">
+          <!-- 放置操作按钮 -->
+          <template>
+            <el-button type="text" size="mini">分配权限</el-button>
+            <el-button type="text" size="mini">编辑</el-button>
+            <el-button type="text" size="mini">删除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <!-- 放置分页组件 -->
       <el-row type="flex" style="height: 60px;" align="middle" justify="end">
@@ -34,8 +46,11 @@ export default {
     async getRoleList() {
       const { rows } = await getRoleList();
       this.list = rows; // 赋值数据
-      console.log(this.list);
+      console.log(rows);
     }
+  },
+  created(){
+    this.getRoleList();
   }
 }
 </script>
