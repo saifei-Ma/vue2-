@@ -1,3 +1,5 @@
+// 组织架构 -- 相关接口
+
 import request from '@/utils/request';
 /**
 * @author: 马赛飞

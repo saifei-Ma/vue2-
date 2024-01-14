@@ -6,7 +6,7 @@
         <el-button type="primary" size="mini">添加角色</el-button>
       </div>
       <!-- 放置 table 组件 -->
-      <el-table>
+      <el-table :data="list">
         <!-- 放置列 -->
         <el-table-column align="center" width="200" label="角色"></el-table-column>
         <el-table-column align="center" width="200" label="启用"></el-table-column>
@@ -22,8 +22,21 @@
   </div>
 </template>
 <script>
+import { getRoleList } from '@/api/role';
 export default {
-  name: 'Role'
+  name: 'Role',
+  data(){
+    return {
+      list: [], // 角色列表
+    }
+  },
+  methods: {
+    async getRoleList() {
+      const { rows } = await getRoleList();
+      this.list = rows; // 赋值数据
+      console.log(this.list);
+    }
+  }
 }
 </script>
 <style scoped>
