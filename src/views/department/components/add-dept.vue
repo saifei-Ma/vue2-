@@ -27,7 +27,7 @@
         <el-row type="flex" justify="center">
           <el-col :span="12">
             <el-button type="primary" size="mini" @click="btnOk">确认</el-button>
-            <el-button size="mini">取消</el-button>
+            <el-button size="mini" @click="btnNoOk">取消</el-button>
           </el-col>
         </el-row>
       </el-form-item>
@@ -114,6 +114,8 @@ export default {
   methods: {
     // 关闭弹窗调用的方法
     close() {
+      // 清空表单数据
+      this.$refs.addDept.resetFields();
       // 调用父组件传入的emit方法，传入参数，将showDialog属性值设置为false
       this.$emit('update:showDialog', false)
     },
@@ -146,10 +148,11 @@ export default {
           // 提示信息
           this.$message.success('添加部门成功');
           this.close();
-        }else{
-          console.log('当前表单无效');
         }
       })
+    },
+    btnNoOk(){
+      this.close();
     }
   },
   created(){
