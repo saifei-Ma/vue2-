@@ -11,20 +11,20 @@
         <el-table-column prop="name" align="center" width="200" label="角色">
           <template v-slot="{ row }">
             <!-- 条件判断 -->
-            <el-input v-if="row.isEdit" size="mini"></el-input>
+            <el-input v-if="row.isEdit" size="mini" v-model="row.editRow.name"></el-input>
             <span v-else>{{ row.name }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="state" align="center" width="200" label="启用">
           <!-- 自定义列结构 -->
           <template v-slot="{ row }">
-            <el-switch v-if="row.isEdit"></el-switch>
+            <el-switch v-if="row.isEdit" v-model="row.editRow.state" :active-color="0" :active-value="1"></el-switch>
             <span v-else>{{ row.state === 1 ? '已启用' : row.state === 0 ? '未启用' : '无' }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="description" label="描述">
           <template v-slot="{ row }">
-            <el-input v-if="row.isEdit" type="textarea"></el-input>
+            <el-input v-if="row.isEdit" type="textarea" v-model="row.editRow.description"></el-input>
             <span v-else>{{  row.description  }}</span>
           </template>
         </el-table-column>
@@ -33,8 +33,8 @@
           <template v-slot="{ row }">
             <template v-if="row.isEdit">
               <!-- 编辑模式 -->
-              <el-button size="mini" type="primary">确认</el-button>
-              <el-button size="mini">取消</el-button>
+              <el-button size="mini" type="primary" @click="btnEditOK(row)">确认</el-button>
+              <el-button size="mini" @click="row.isEdit = false">取消</el-button>
             </template>
             <template v-else>
             <!-- 非编辑模式 -->
@@ -79,7 +79,7 @@
   </div>
 </template>
 <script>
-import { addRole, getRoleList } from '@/api/role';
+import { addRole, getRoleList, updateRole } from '@/api/role';
 export default {
   name: 'Role',
   data() {
@@ -118,7 +118,13 @@ export default {
         // 数据响应式的问题  数据变化 视图更新
         // 添加的动态属性 不具备响应式特点
         // this.$set(目标对象, 属性名称, 初始值) 可以针对目标对象 添加的属性 添加响应式
-        this.$set(item, 'isEdit', false)
+        this.$set(item, 'isEdit', false);
+        // 初始化时缓存数据
+        this.$set(item, 'editRow',{
+          name: item.name,
+          state: item.state,
+          description: item.description
+        })
       })
     },
     changePage(newPage) {
@@ -153,6 +159,28 @@ export default {
     // 点击编辑行的回调
     btnEditRow(row){
       row.isEdit = true // 改变行的编辑状态
+      // 更新状态数据
+      row.editRow.name = row.name
+      row.editRow.description = row.description
+      row.editRow.state = row.state
+    },
+    // 行内编辑--点击确认按钮的回调
+    async btnEditOK(row){
+      if (row.editRow.name && row.editRow.description) {
+        // 下一步操作
+        await updateRole({ ...row.editRow, id: row.id });
+        // 更新操作
+        this.$message.success('更新角色成功!');
+        // 更新显示数据, 退出编辑模式
+        // row.name = row.editRow.name // eslint的一校验 误判
+        // Object.assign(target, source)
+        Object.assign(row, {
+          ...row.editRow,
+          isEdit: false // 退出编辑模式
+        }) // 避免eslint的误判
+      } else {
+        this.$message.warning('角色名和描述不能为空!');
+      }
     }
   },
   created() {

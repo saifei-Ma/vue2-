@@ -24,3 +24,15 @@ export function addRole(data) {
     data // 新增的数据对象
   })
 }
+/**
+* @author: 马赛飞
+* @Description: 更新角色信息的API接口
+* @param: 
+*/
+export function updateRole(data) {
+  return request({
+    url: `/sys/role/${data.id}`,
+    method: 'put',
+    data
+  })
+}
