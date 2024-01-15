@@ -12,3 +12,15 @@ export function getRoleList(params) {
     params // 查询参数
   })
 }
+/**
+* @author: 马赛飞
+* @Description: 新增角色的API接口
+* @param: 
+*/
+export function addRole(data) {
+  return request({
+    url : '/sys/role',
+    method : 'post',
+    data // 新增的数据对象
+  })
+}

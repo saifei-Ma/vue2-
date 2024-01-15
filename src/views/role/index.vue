@@ -28,17 +28,12 @@
       <!-- 放置分页组件 -->
       <el-row type="flex" style="height: 60px;" align="middle" justify="end">
         <!-- 放置分页组件 -->
-        <el-pagination
-          :page-size="pageParams.pagesize"
-          :current-page="pageParams.page"
-          @current-change="changePage"
-          :total="pageParams.total"
-          layout="prev ,pager, next"
-        ></el-pagination>
+        <el-pagination :page-size="pageParams.pagesize" :current-page="pageParams.page" @current-change="changePage"
+          :total="pageParams.total" layout="prev ,pager, next"></el-pagination>
       </el-row>
     </div>
     <!-- 弹层内容 -->
-    <el-dialog title="新增角色" :visible="showDialog">
+    <el-dialog title="新增角色" :visible.sync="showDialog" @close="btnCancel" width="500">
       <!-- 表单内容 -->
       <el-form ref="roleForm" :model="roleForm" :rules="rules" label-width="120px">
         <el-form-item prop="name" label="角色名称">
@@ -54,7 +49,7 @@
         <el-form-item>
           <el-row type="flex" justify="center">
             <el-col :span="12">
-              <el-button type="primary" size="mini">确认</el-button>
+              <el-button type="primary" size="mini" @click="btnOk">确认</el-button>
               <el-button size="mini">取消</el-button>
             </el-col>
           </el-row>
@@ -64,10 +59,10 @@
   </div>
 </template>
 <script>
-import { getRoleList } from '@/api/role';
+import { addRole, getRoleList } from '@/api/role';
 export default {
   name: 'Role',
-  data(){
+  data() {
     return {
       list: [], // 角色列表
       pageParams: {
@@ -77,16 +72,16 @@ export default {
       },
       showDialog: false, // 控制弹层显示
       roleForm: { // 表单数据
-        name : '', // 角色名称
-        description : '', // 角色描述
-        state : 0, // 默认未启用 关闭 0 打开1
+        name: '', // 角色名称
+        description: '', // 角色描述
+        state: 0, // 默认未启用 关闭 0 打开1
       },
-      rules : {
-        name :[
-          { required : true, message : '角色名称不能为空', trigger : 'blur'}
+      rules: {
+        name: [
+          { required: true, message: '角色名称不能为空', trigger: 'blur' }
         ],
         description: [
-          { required : true, message : '角色描述不能为空', trigger : 'blur'}
+          { required: true, message: '角色描述不能为空', trigger: 'blur' }
         ]
       }
     }
@@ -99,13 +94,37 @@ export default {
       this.pageParams.total = total; // 初始化时 : 赋值总条数
       // console.log(total);
     },
-    changePage(newPage){
+    changePage(newPage) {
       this.pageParams.page = newPage; // 赋值当前页
       console.log(newPage);
       this.getRoleList(); // 重新调用获取数据的方法
+    },
+    // 弹层点击确认按钮的回调
+    btnOk() {
+      // 验证表单是否有效
+      this.$refs.roleForm.validate(async isOK => {
+        // 如果表单有效
+        if (isOK) {
+          // 添加角色
+          await addRole(this.roleForm)
+          // 提示添加角色成功
+          this.$message.success('添加角色成功')
+          // 获取角色列表
+          this.getRoleList()
+          // 取消按钮
+          this.btnCancel()
+        }
+      })
+    },
+    // 弹层点击取消按钮的回调
+    btnCancel(){
+      // 重置表单
+      this.$refs.roleForm.resetFields();
+      // 关闭弹窗
+      this.showDialog = false;
     }
   },
-  created(){
+  created() {
     this.getRoleList();
   }
 }
