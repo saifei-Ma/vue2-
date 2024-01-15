@@ -3,7 +3,7 @@
     <div class="app-container">
       <div class="left">
         <!-- 搜索框 -->
-        <el-input style="margin-bottom: 10px;" type="text" prefix-icon="el-icon-search" size="small"
+        <el-input v-model="queryParams.keyword" @input="changeValue" style="margin-bottom: 10px;" type="text" prefix-icon="el-icon-search" size="small"
           placeholder="输入员工姓名全员搜索"></el-input>
         <!-- 树形组件 -->
         <!--  :props="defaultProps"：这是定义节点属性的配置项
@@ -97,8 +97,9 @@ export default {
       list: [], // 存放员工数据
       queryParams: {
         departmentId :null,
-        page: 1,
-        pageSize: 10, // 记录员工的总数
+        page: 1, // 页数
+        pageSize: 10, // 每页显示10条数据
+        keyword : '', // 模糊搜索的字段
       },
       total: 0, // 记录员工的总数
     }
@@ -140,6 +141,16 @@ export default {
     changePage(newPage){
       this.queryParams.page = newPage // 赋值新页码
       this.getEmployeeList(); // 重新获取员工列表
+    },
+    // 搜索的功能函数 (进行防抖查询)
+    changeValue(){
+      // 单位时间内只执行最后一次
+      // this的实例上赋值了一个timer的属性
+      clearTimeout(this.timer); // 清除上一次的延时器
+      this.timer = setTimeout(() => {
+        this.queryParams.page = 1; // 赋值第一页
+        this.getEmployeeList(); // 重新获取员工列表
+      },300) 
     }
   }
 }
