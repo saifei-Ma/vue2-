@@ -40,7 +40,10 @@
             <!-- 非编辑模式 -->
               <el-button type="text" size="mini">分配权限</el-button>
               <el-button type="text" size="mini" @click="btnEditRow(row)">编辑</el-button>
-              <el-button type="text" size="mini">删除</el-button>
+              <!-- 在删除的时候,弹出气泡框 -->
+              <el-popconfirm title="确定要删除吗？" @onConfirm="confirmDel(row.id)">
+                <el-button type="text" size="mini" slot="reference" style="margin-left: 10px;">删除</el-button>
+              </el-popconfirm>
             </template>
           </template>
         </el-table-column>
@@ -79,7 +82,7 @@
   </div>
 </template>
 <script>
-import { addRole, getRoleList, updateRole } from '@/api/role';
+import { addRole, getRoleList, updateRole, delRole } from '@/api/role';
 export default {
   name: 'Role',
   data() {
@@ -181,7 +184,17 @@ export default {
       } else {
         this.$message.warning('角色名和描述不能为空!');
       }
-    }
+    },
+    // 删除气泡框的回调函数
+   async confirmDel(id){
+      // 调用删除角色函数
+      await delRole(id);
+      // 提示删除角色成功
+      this.$message.success('删除角色成功!');
+      // 如果删除的是最后一个 (页数就减一)
+      if (this.list.length === 1) this.pageParams.page--;
+      // 重新获取角色列表
+      this.getRoleList();}
   },
   created() {
     this.getRoleList();

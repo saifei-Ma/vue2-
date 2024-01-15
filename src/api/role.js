@@ -36,3 +36,14 @@ export function updateRole(data) {
     data
   })
 }
+/**
+* @author: 马赛飞
+* @Description: 删除角色的API接口
+* @param: 
+*/
+export function delRole(id) {
+  return request({
+    url : `/sys/role/${id}`,
+    method : 'delete'
+  })
+}
