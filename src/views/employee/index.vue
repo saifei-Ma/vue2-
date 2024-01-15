@@ -12,12 +12,16 @@
               highlight-current：表示高亮当前节点
         -->
         <el-tree
+          ref="deptTree"
+          node-key="id"
           :data="depts"
           :props="defaultProps"
           default-expand-all
           :expand-on-click-node="false"
           highlight-current
+          @current-change="selectNode"
         >
+        <!-- 需要给定node-key属性，否则setCurrentKey方法不知道设置的是哪个字段的值 -->
         </el-tree>
       </div>
       <div class="right">
@@ -48,6 +52,10 @@ export default {
         label: 'name',
         // 子节点
         children: 'children'
+      },
+      // 存储查询参数
+      queryParams: {
+        departmentId : null
       }
     }
   },
@@ -60,6 +68,17 @@ export default {
       let result = await getDepartment();
       // console.log(tranListToTreeData(result, 0));
       this.depts = tranListToTreeData(result, 0)
+      // 初始化之前将第一个设置为高亮
+      this.queryParams.departmentId = this.depts[0].id;
+      // 树组件渲染是异步的, 等到更新完毕, 需要使用nextTick
+      this.$nextTick(() => {
+        // 当组件加载完成之后，设置当前的key为查询参数中的部门id
+        this.$refs.deptTree.setCurrentKey(this.queryParams.departmentId);
+      })
+    },
+    selectNode(node) {
+      // 设置查询参数中的部门id为当前节点id
+      this.queryParams.departmentId = node.id;
     }
   }
 }
